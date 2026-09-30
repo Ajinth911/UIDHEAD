@@ -1,0 +1,215 @@
+/* Global Portfolio Layout */
+.portfolio-wrapper {
+  width: 100%;
+  position: relative;
+  background-color: var(--color-cream);
+  color: var(--color-dark);
+  overflow-x: hidden;
+}
+
+.portfolio-main {
+  width: 100%;
+  position: relative;
+}
+
+/* ========================================================
+   PINNED 3D HERO SECTION
+   ======================================================== */
+.hero-scroll-wrapper {
+  width: 100%;
+  position: relative;
+  background-color: var(--color-cream);
+  z-index: 10;
+  isolation: isolate;
+}
+
+.hero-pin-section {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  padding: var(--hero-frame-inset);
+  box-sizing: border-box;
+  background-color: var(--color-cream);
+  display: flex;
+}
+
+.hero-inner-frame {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--border-radius-hero);
+  background-color: #d40f00;
+  box-shadow: 0 20px 50px -10px rgba(180, 20, 0, 0.25);
+  transform-origin: center center;
+}
+
+/* Three.js Canvas Container */
+.scene-container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background-color: #d40f00;
+}
+
+.webgl-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Film Grain Noise Overlay */
+.noise-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  mix-blend-mode: overlay;
+}
+
+/* Fixed Header Capsule Overlay */
+.site-header-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 26px 32px;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: none;
+}
+
+.header-logo {
+  pointer-events: auto;
+  color: var(--color-cream);
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: transform 0.25s ease, opacity 0.2s ease;
+}
+
+.header-logo:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+.logo-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.header-nav-capsule {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 2.5vw, 36px);
+  padding: 0 clamp(16px, 2vw, 32px);
+  height: 56px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.nav-item {
+  color: var(--color-cream);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+  opacity: 0.9;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  position: relative;
+}
+
+.nav-item:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+.nav-lang {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--color-cream);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  margin-left: 6px;
+}
+
+.lang-active {
+  opacity: 1;
+}
+
+.lang-divider {
+  opacity: 0.4;
+}
+
+.lang-inactive {
+  opacity: 0.45;
+}
+
+.header-right-spacer {
+  width: 44px;
+}
+
+/* ========================================================
+   BOTTOM LEFT SCROLL INDICATOR BARS
+   ======================================================== */
+.scroll-indicator-bars {
+  position: fixed;
+  bottom: 32px;
+  left: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 90;
+  pointer-events: none;
+}
+
+.scroll-indicator-bars .bar {
+  height: 2px;
+  background-color: var(--color-cream);
+  border-radius: 2px;
+  width: 14px;
+  opacity: 0.35;
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+  mix-blend-mode: difference;
+}
+
+.scroll-indicator-bars .bar.active {
+  width: 48px;
+  opacity: 1;
+}
+
+.scroll-indicator-bars .bar.neighbor {
+  width: 26px;
+  opacity: 0.65;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .site-header-overlay {
+    padding: 18px 20px;
+  }
+
+  .header-nav-capsule {
+    display: none;
+  }
+
+  .scroll-indicator-bars {
+    display: none;
+  }
+}
