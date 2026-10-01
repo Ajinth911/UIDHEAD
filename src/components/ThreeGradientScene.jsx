@@ -152,6 +152,48 @@ const ThreeGradientScene = forwardRef(function ThreeGradientScene(
     );
 
     // 7. Typography in 3D Space
+    const createDynamicTextTexture = (
+      text,
+      {
+        fontSize = 220,
+        fontWeight = '800',
+        lineHeight = 1.05,
+        letterSpacing = '-0.02em',
+        width = 2048,
+        height = 1024,
+      } = {}
+    ) => {
+      const textCanvas = document.createElement('canvas');
+      textCanvas.width = width;
+      textCanvas.height = height;
+      const ctx = textCanvas.getContext('2d');
+      ctx.clearRect(0, 0, width, height);
+
+      ctx.fillStyle = '#ffffff';
+      ctx.font = `${fontWeight} ${fontSize}px 'Cabinet Grotesk', 'Plus Jakarta Sans', -apple-system, sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      if (ctx.letterSpacing !== undefined) {
+        ctx.letterSpacing = letterSpacing;
+      }
+
+      const lines = Array.isArray(text) ? text : String(text).split('\n');
+      const totalLines = lines.length;
+      const lineSpacing = fontSize * lineHeight;
+      const startY = height / 2 - ((totalLines - 1) * lineSpacing) / 2;
+
+      lines.forEach((line, idx) => {
+        ctx.fillText(line.trim(), width / 2, startY + idx * lineSpacing);
+      });
+
+      const tex = new THREE.CanvasTexture(textCanvas);
+      tex.colorSpace = THREE.SRGBColorSpace;
+      tex.minFilter = THREE.LinearFilter;
+      tex.magFilter = THREE.LinearFilter;
+      tex.needsUpdate = true;
+      return tex;
+    };
+
     const createTextPlane = (texturePath, w, h, posX, posY, posZ, rotY) => {
       const tex = textureLoader.load(texturePath);
       tex.colorSpace = THREE.SRGBColorSpace;
@@ -169,26 +211,44 @@ const ThreeGradientScene = forwardRef(function ThreeGradientScene(
       return mesh;
     };
 
-    // Text 1: "guillaume zhu" (Initial view facing Z)
-    const textNameMesh = createTextPlane(
-      '/textures/texts/text-name.webp',
-      11.0,
-      2.8,
+    const createDynamicTextPlane = (text, w, h, posX, posY, posZ, rotY, opts = {}) => {
+      const tex = createDynamicTextTexture(text, opts);
+      const geom = new THREE.PlaneGeometry(w, h);
+      const mat = new THREE.MeshBasicMaterial({
+        map: tex,
+        transparent: true,
+        depthWrite: false,
+        side: THREE.DoubleSide,
+      });
+      const mesh = new THREE.Mesh(geom, mat);
+      mesh.position.set(posX, posY, posZ);
+      mesh.rotation.y = rotY;
+      scene.add(mesh);
+      return mesh;
+    };
+
+    // Text 1: "uncommon" on line 1, "design" on line 2 (Center initial view facing Z)
+    const textNameMesh = createDynamicTextPlane(
+      'uncommon\ndesign',
+      9.0,
+      4.5,
       0,
       0,
       -2.5,
-      0
+      0,
+      { fontSize: 240, fontWeight: '800', lineHeight: 1.05, width: 2048, height: 1024 }
     );
 
-    // Text 2: "art director" (Orbit view facing -X)
-    const textArtDirectorMesh = createTextPlane(
-      '/textures/texts/text-art-director.webp',
-      5.5 * 0.85,
-      1.4 * 0.85,
+    // Text 2: "institute of design" (Orbit view facing -X)
+    const textArtDirectorMesh = createDynamicTextPlane(
+      'institute of design',
+      6.0 * 0.85,
+      1.5 * 0.85,
       1.0,
       5.25,
       -1.75,
-      -Math.PI * 0.5
+      -Math.PI * 0.5,
+      { fontSize: 130, fontWeight: '700', width: 2048, height: 512 }
     );
     textArtDirectorMesh.material.opacity = 0;
 
@@ -237,7 +297,11 @@ const ThreeGradientScene = forwardRef(function ThreeGradientScene(
       const fovRad = THREE.MathUtils.degToRad(camera.fov);
       const visibleHeight = 2 * dist * Math.tan(fovRad * 0.5);
       const visibleWidth = visibleHeight * camera.aspect;
-      const targetScale = Math.min(1, (visibleWidth * 0.85) / 11.0);
+      const targetScale = Math.min(
+        1,
+        (visibleWidth * 0.86) / 9.0,
+        (visibleHeight * 0.86) / 4.5
+      );
       textNameMesh.scale.setScalar(targetScale);
     };
 

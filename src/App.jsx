@@ -4,6 +4,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import ThreeGradientScene from './components/ThreeGradientScene';
+import UidSection from './components/UidSection';
 import './App.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -70,7 +71,7 @@ export default function App() {
     <div className="portfolio-wrapper">
       {/* Fixed Site Header Capsule Overlay */}
       <header className="site-header-overlay">
-        <a href="#hero" className="header-logo" title="Guillaume Zhu">
+        <a href="#hero" className="header-logo" title="Uncommon Institute of Design">
           <svg
             className="logo-svg"
             viewBox="0 0 48 48"
@@ -117,8 +118,9 @@ export default function App() {
         <div className="header-right-spacer" />
       </header>
 
-      {/* Main Content Flow - Pure 3D Interactive Hero */}
+      {/* Main Content Flow */}
       <main className="portfolio-main">
+        {/* 1. Pure 3D Interactive Hero */}
         <div id="hero-trigger" className="hero-scroll-wrapper">
           <section ref={heroPinContainerRef} className="hero-pin-section" id="hero">
             <div ref={heroCardRef} className="hero-inner-frame">
@@ -131,6 +133,9 @@ export default function App() {
             </div>
           </section>
         </div>
+
+        {/* 2. UID Horizontal Section ("uncommon institute of design") */}
+        <UidSection />
       </main>
 
       {/* Left Bottom Scroll Indicator Bars */}

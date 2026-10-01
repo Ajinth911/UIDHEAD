@@ -20,7 +20,7 @@ export default function FooterSection() {
 
           <div className="footer-links-group">
             <a
-              href="mailto:contact@guillaumezhu.com"
+              href="mailto:contact@uncommondesign.edu"
               className="footer-action-btn"
             >
               <Mail size={16} />
